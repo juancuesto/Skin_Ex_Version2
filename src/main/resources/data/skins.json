@@ -1,0 +1,32 @@
+
+[{
+  "nombre": "Guille",
+  "configuracion": true,
+  "color": "verde",
+  "precio": 300
+},
+  {
+    "nombre": "Ryo",
+    "configuracion": "false",
+    "color": "blanco",
+    "precio": 200
+  },
+  {
+    "nombre": "Ken",
+    "configuracion": "true",
+    "color": "rojo",
+    "precio": 400
+  },
+  {
+    "nombre": "Chun Lee",
+    "configuracion": "false",
+    "color": "Azul",
+    "precio": 250
+  },
+  {
+  "nombre": "Sagat",
+  "configuracion": "false",
+  "color": "Rojo",
+  "precio": 300
+}
+]
