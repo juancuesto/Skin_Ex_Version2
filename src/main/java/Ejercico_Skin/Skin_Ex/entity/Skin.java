@@ -13,16 +13,16 @@ public class Skin {
     private String nombre;
 
     @Column(name = "Configuracion")
-    private boolean configuracion;
+    private Boolean configuracion;
     @Column(name = "Color")
     private String color;
     @Column(name = "Precio")
-    private double precio;
+    private Double precio;
 
     public Skin() {
     }
 
-    public Skin(String nombre, boolean configuracion, String color, double precio) {
+    public Skin(Long id,String nombre, Boolean configuracion, String color, Double precio) {
         this.nombre = nombre;
         this.configuracion = configuracion;
         this.color = color;
@@ -45,11 +45,11 @@ public class Skin {
         this.nombre = nombre;
     }
 
-    public boolean getConfiguracion() {
+    public Boolean getConfiguracion() {
         return configuracion;
     }
 
-    public void setConfiguracion(boolean configuracion) {
+    public void setConfiguracion(Boolean configuracion) {
         this.configuracion = configuracion;
     }
 
@@ -61,11 +61,11 @@ public class Skin {
         this.color = color;
     }
 
-    public double getPrecio() {
+    public Double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Double precio) {
         this.precio = precio;
     }
 

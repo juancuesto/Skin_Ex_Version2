@@ -3,8 +3,7 @@ package Ejercico_Skin.Skin_Ex.service;
 
 
 import Ejercico_Skin.Skin_Ex.Excepciones.*;
-import Ejercico_Skin.Skin_Ex.Excepciones.ExcepcionSkinNoDisponible;
-import Ejercico_Skin.Skin_Ex.Excepciones.ExceptionUsuarioNotFound;
+
 import Ejercico_Skin.Skin_Ex.entity.Skin;
 import Ejercico_Skin.Skin_Ex.entity.Usuario;
 
@@ -13,16 +12,14 @@ import java.util.Optional;
 
 public interface SkinService {
 
-    List<Skin> listadoSkinsDispponibles()throws ExcepcionSkinNoDisponible;
-    //Skin crearSkin(Skin skin,Long usuario_id) throws ExcepcionSkinNoDisponible;
+    List<Skin> listadoSkinsDispponibles();
 
-    Optional<Skin> buscarSkinByName(Skin skin) throws ExcepcionSkinNoDisponible;
+    Optional<Skin> buscarSkinByName(Skin skin) ;
     List<Skin> listarSkins();
-    Skin obtenerSkinById(Long skin_id) throws EcceptionSkinNotFound;
+    Skin obtenerSkinById(Long skin_id);
 
-    Skin actualizarSkin(Skin skin,Long usurious_id) throws ExceptionUsuarioNotFound, EcceptionSkinNotFound,ExcepcionSkinNoDisponible;
-    void borrarSkin(Usuario usuario,Long id) throws ExceptionUsuarioNotFound, ExcepcionSkinNoDisponible;
-    Skin comprarSkin(Skin skin,Long usuario_id) throws ExceptionComprarSkin, ExcepcionSkinNoDisponible, ExceptionUsuarioNotFound;
+    Skin actualizarSkin(Skin skin,Long usuario_id) ;
+    Skin comprarSkin(Skin skin,Long usuario_id);
     Optional<Skin> buscarSkin(Long skin_id);
     void deleteAllSkins();
 }

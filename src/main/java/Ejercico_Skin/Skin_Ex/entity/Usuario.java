@@ -1,6 +1,6 @@
 package Ejercico_Skin.Skin_Ex.entity;
 
-import Ejercico_Skin.Skin_Ex.Excepciones.EcceptionSkinNotFound;
+
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,9 +17,9 @@ public class Usuario {
     @Column(name = "Apellido")
     private String apellido;
     @Column(name = "Edad")
-    private int edad;
+    private Integer edad;
     @Column(name = "Saldo")
-    private double saldo;
+    private Double saldo;
     @OneToMany(cascade = CascadeType.MERGE)
     @JoinColumn(name = "usuario_id")
     private List<Skin> skins;
@@ -27,7 +27,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, int edad, double saldo, List<Skin> skins) {
+    public Usuario(String nombre, String apellido, Integer edad, Double saldo, List<Skin> skins) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.edad = edad;
@@ -63,7 +63,7 @@ public class Usuario {
         return edad;
     }
 
-    public void setEdad(int edad) {
+    public void setEdad(Integer edad) {
         this.edad = edad;
     }
 
@@ -71,7 +71,7 @@ public class Usuario {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
+    public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 

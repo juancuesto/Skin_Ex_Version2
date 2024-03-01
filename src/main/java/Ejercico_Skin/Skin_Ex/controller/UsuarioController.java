@@ -15,7 +15,8 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/skins")
-public class UsuarioController {
+public class
+UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
@@ -26,111 +27,86 @@ public class UsuarioController {
 
     @PostMapping("/crear_usuario")
     public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
-        try {
-            return new ResponseEntity<>(usuarioService.crearUsuario(usuario), HttpStatus.CREATED);
-        } catch (ExceptionCrearUsuario e) {
-            return new ResponseEntity<>("Error al crear el usuario", HttpStatus.NO_CONTENT);
-        }
+        return new ResponseEntity<>(usuarioService.crearUsuario(usuario), HttpStatus.CREATED);
     }
 
-    @GetMapping("/buscar_usuarios")
-    public ResponseEntity<?> buscarUsuarioById(@PathVariable Long id) {
-        try {
-            return new ResponseEntity<>(usuarioService.buscarUsuario(id), HttpStatus.OK);
-        } catch (ExceptionUsuarioNotFound e) {
-            return new ResponseEntity<>("No se ha encontrado el usuario", HttpStatus.NOT_FOUND);
+    @GetMapping("/buscar_usuarios/{id}")
+    public ResponseEntity<?> buscarUsuarioById(@PathVariable Long id) throws BadRequestException{
+        System.out.println("impresion del valor del ID2: " + id);
+        if (id == null) {
+            throw new NotFoundException("p-505", HttpStatus.BAD_REQUEST, "Necesitas ponr un Id");
         }
+        return new ResponseEntity<>(usuarioService.buscarUsuario(id), HttpStatus.OK);
+
     }
+
     @GetMapping("/avalaible")
     public ResponseEntity<?> listarSkinsDisponibles() {
-        try {
-            return new ResponseEntity<>(skinService.listadoSkinsDispponibles(), HttpStatus.NOT_FOUND);
-        } catch (ExcepcionSkinNoDisponible e) {
-            return new ResponseEntity<>("Nos e ha podido encontrar los skins disponibles", HttpStatus.NOT_FOUND);
+        List<Skin> listadoSkins = skinService.listadoSkinsDispponibles();
+        if (listadoSkins.isEmpty()) {
+            return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(listadoSkins);
     }
-    @PostMapping("/findByName")
+
+    @GetMapping("/findByName")
     public ResponseEntity<?> obeterSkinByName(@RequestBody Skin skin) {
-
-        try {
-
             Optional<Skin> skinOptional = skinService.buscarSkinByName(skin);
-            return new ResponseEntity<>("El skin no esta disponible", HttpStatus.NOT_FOUND);
-
-        } catch (ExcepcionSkinNoDisponible e) {
-            return new ResponseEntity<>(skin, HttpStatus.OK);
-        }
+            return new ResponseEntity<>(skinOptional.get(), HttpStatus.OK);
     }
 
     @PostMapping("buy/{usuario_id}")
     public ResponseEntity<?> comprarSkin(@RequestBody Skin skin, @PathVariable Long usuario_id) {
-        try {
             return new ResponseEntity<>(skinService.comprarSkin(skin, usuario_id), HttpStatus.OK);
-        } catch (ExceptionUsuarioNotFound e) {
-            return new ResponseEntity<>("No se ha encontrado el Usuario", HttpStatus.NOT_FOUND);
-        } catch (ExcepcionSkinNoDisponible e) {
-            return new ResponseEntity<>("El skin no estadisponible", HttpStatus.NOT_FOUND);
-        } catch (ExceptionComprarSkin e) {
-            return new ResponseEntity<>("El usuario no dispone de aldo suficiente", HttpStatus.BAD_REQUEST);
-        }
     }
 
     @GetMapping("myskins/{usuario_id}")
-    public ResponseEntity<?> listadoSkinsUnUsuario(@PathVariable Long usuario_id){
-        try {
-            List<Skin> listadoSkins=usuarioService.listadoSkinsUsuarioId(usuario_id);
-            if(listadoSkins.isEmpty()){
-                return new ResponseEntity<>("Este usuario no ha comprado ningun skin",HttpStatus.NOT_FOUND);
-            }else {
-                return new ResponseEntity<>(listadoSkins,HttpStatus.OK);
-            }
-        }catch (ExceptionUsuarioNotFound e){
-            return new ResponseEntity<>("No se ha encontrado al usuario",HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> listadoSkinsUnUsuario(@PathVariable Long usuario_id) {
+        List<Skin> listadoSkins = usuarioService.listadoSkinsUsuarioId(usuario_id);
+        return new ResponseEntity<>(listadoSkins, HttpStatus.OK);
     }
-    @DeleteMapping("delete/{skin_id}")
-    public ResponseEntity<?> deleteSkinDeUnUsuario(@RequestBody Usuario usuario,@PathVariable Long skin_id){
-        try {
-            return new ResponseEntity<>(usuarioService.deleteSkinUsuario(usuario,skin_id),HttpStatus.OK);
-        }catch (ExceptionUsuarioNotFound e){
-            return new ResponseEntity<>("No se ha encontrado al usuario",HttpStatus.NOT_FOUND);
-        }catch (ExcepcionSkinNoDisponible e){
-            return new ResponseEntity<>("Este usuario no ha comprado este skin",HttpStatus.NOT_FOUND);
-        }catch (EcceptionSkinNotFound e){
-            return new ResponseEntity<>("No se ha encontrado el skin",HttpStatus.NOT_FOUND);
-        }
-    }
-    @DeleteMapping("/delete/all/skins")
-    public ResponseEntity<?> deleteAllSkins(){
-        skinService.deleteAllSkins();
-        return new ResponseEntity<>("Se han borrado todos los skins",HttpStatus.OK);
-    }
-    @DeleteMapping("/delete/all/usuarios")
-    public ResponseEntity<?> deleteAllUsuarios(){
-        usuarioService.deleteAllUsuarios();
-        return new ResponseEntity<>("Se han borrado todos los usuarios",HttpStatus.OK);
-    }
-    @GetMapping("/getskin/{id}")
-    public ResponseEntity<?> obtenerSkinById(@PathVariable("id") Long  skin_id){
-        try {
-            return new ResponseEntity<>(skinService.obtenerSkinById(skin_id),HttpStatus.OK);
-        }catch (EcceptionSkinNotFound e){
-            return new ResponseEntity<>("No se ha encontrado el skin",HttpStatus.NOT_FOUND);
 
-        }
+    @DeleteMapping("delete/{skin_id}")
+    public ResponseEntity<?> deleteSkinDeUnUsuario(@RequestBody Usuario usuario, @PathVariable Long skin_id) {
+       return new ResponseEntity<>(usuarioService.deleteSkinUsuario(usuario,skin_id),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/all/skins")
+    public ResponseEntity<?> deleteAllSkins() {
+        skinService.deleteAllSkins();
+        return new ResponseEntity<>("Se han borrado todos los skins", HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/all/usuarios")
+    public ResponseEntity<?> deleteAllUsuarios() {
+        usuarioService.deleteAllUsuarios();
+        return new ResponseEntity<>("Se han borrado todos los usuarios", HttpStatus.OK);
+    }
+
+    @GetMapping(" ")
+    public ResponseEntity<?> obtenerSkinById(@PathVariable("id") Long skin_id) {
+            return new ResponseEntity<>(skinService.obtenerSkinById(skin_id), HttpStatus.OK);
     }
 
     @PutMapping("/color/{id}")
-    public ResponseEntity<?> actualizarSkinCambioColor(@RequestBody Skin skin,@PathVariable Long id){
-        try {
-            return new ResponseEntity<>(skinService.actualizarSkin(skin,id),HttpStatus.OK);
-        }catch (EcceptionSkinNotFound e){
-            return new ResponseEntity<>("no se ha encontrado el skin en BBDD",HttpStatus.NOT_FOUND);
-        }catch (ExceptionUsuarioNotFound e){
-            return new ResponseEntity<>("No se ha encontrado el usuario",HttpStatus.NOT_FOUND);
-        }catch (ExcepcionSkinNoDisponible e){
-            return new ResponseEntity<>("Este usuario no ha comprado esta skin",HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<?> actualizarSkinCambioColor(@RequestBody Skin skin, @PathVariable Long id) {
+            return new ResponseEntity<>(skinService.actualizarSkin(skin, id), HttpStatus.OK);
+    }
+
+    @GetMapping("/listar/usuarios")
+    public ResponseEntity<?> listarUsuarios() {
+        List<Usuario> listaUsuarios = usuarioService.listarUsuarios();
+        return new ResponseEntity<>(listaUsuarios, HttpStatus.OK);
+    }
+
+    @PutMapping("/actaulizar/usuario")
+    public ResponseEntity<?> actualizarUsuario(@RequestBody Usuario usuario) {
+        return new ResponseEntity<>(usuarioService.actualizarUsuario(usuario), HttpStatus.OK);
+    }
+    @DeleteMapping("/borrar_usuario/{id}")
+    public ResponseEntity<?> borrarUsuarioById(@PathVariable Long id){
+        usuarioService.deleteUsuario(id);
+        return new ResponseEntity<>("Elemento borrado correctamente",HttpStatus.OK);
     }
 }
 
